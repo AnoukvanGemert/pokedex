@@ -51,8 +51,16 @@ async function getPokemon() {
         }
     });
 
-    // Initialiseer met de eerste 20 Pokémon
     loadMoreButton.click(); // Laad de eerste set Pokémon bij het laden van de pagina
+}
+
+async function searchPokemon() {
+    const input = document.getElementById("myInput").value.toLowerCase();
+    const pokemonDivs = document.querySelectorAll('#pokemon-container > div');
+
+    pokemonDivs.forEach(pokemonDiv => {
+        const
+    })
 }
 
 getPokemon();
