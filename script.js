@@ -1,3 +1,5 @@
+//colors vna de types
+
 const BATCH_SIZE = 20; // Number of Pokémon to load per batch
 let offset = 1; // Initial offset for Pokémon IDs
 let isLoading = false;
@@ -21,6 +23,7 @@ async function getPokemon(offset, limit) {
             const pokedexJson = await pokedexResponse.json();
             const namePokemon = pokedexJson.name;
             const imgPokemon = pokedexJson.sprites.front_default;
+            const types = pokedexJson.types.map(typeInfo => typeInfo.type.name);
 
             console.log(`Fetched Pokémon: ${namePokemon}`);
 
@@ -37,6 +40,11 @@ async function getPokemon(offset, limit) {
             newImg.alt = `Image of ${namePokemon}`;
             newImg.className = "mx-auto";
             pokemonDiv.appendChild(newImg);
+
+            const newType = document.createElement("p");
+            newType.textContent = `Type: ${types.join(', ')}`;
+            newType.className = "text-sm text-gray-600";
+            pokemonDiv.appendChild(newType);
 
             container.appendChild(pokemonDiv);
             console.log(`Added Pokémon to container: ${namePokemon}`);
