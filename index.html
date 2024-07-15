@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="pokedex">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-gray-100 text-center p-4">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="pokedex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <input type="text" id="myInput" onkeyup="searchPokemon()" placeholder="search for a pokemon...">
-        <div id="pokemon-container" class="max-w-4xl mx-auto grid grid-cols-4 gap-4"></div>
-        <button id="load-more" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
-            Load More
-        </button> <!-- Knop om meer Pokémon te laden -->
-        
-        <script src="script.js" async defer></script>
-    </body>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 text-center p-4">
+    <div id="pokemon-box" class="w-2/3 h-2/3 border-4 border-r-2 mt-2">
+      <input
+        type="text"
+        id="myInput"
+        onkeyup="searchPokemon()"
+        placeholder="search for a pokemon..."
+      />
+      <div
+        id="pokemon-container"
+        class="max-w-4xl mx-auto grid grid-cols-4 gap-4 w-2/3 h-96 overflow-y-auto"
+      ></div>
+      <div id="loading" class="text-center text-lg text-green-700 hidden">
+        Loading...
+      </div>
+    </div>
+
+    <script src="script.js" async defer></script>
+  </body>
 </html>

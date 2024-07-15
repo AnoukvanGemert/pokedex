@@ -1,116 +1,82 @@
-const maxPokemon = 1000; // Maximum aantal Pokémon
-let pokemonData = []; // Array om alle Pokémon data bij te houden
-let pokemonCount = 0; // Houdt bij hoeveel Pokémon er al zijn geladen
+const BATCH_SIZE = 20; // Number of Pokémon to load per batch
+let offset = 1; // Initial offset for Pokémon IDs
+let isLoading = false;
 
-async function fetchAllPokemon() {
-    try {
-        // Doorloop alle Pokémon tot het maximum
-        for (let pokemons = 1; pokemons <= maxPokemon; pokemons++) {
-            const pokedexUrl = `https://pokeapi.co/api/v2/pokemon/${pokemons}`;
-            const pokedexResponse = await fetch(pokedexUrl);
-
-            if (!pokedexResponse.ok) {
-                throw new Error(`Failed to fetch Pokémon for ${pokemons}`);
-            }
-
-            const pokedexJson = await pokedexResponse.json();
-            pokemonData.push({
-                id: pokemons,
-                name: pokedexJson.name.toLowerCase(),
-                img: pokedexJson.sprites.front_default
-            });
-        }
-    } catch (error) {
-        console.error(error.message);
-    }
-}
-
-async function getPokemon(startIndex, endIndex) {
+async function getPokemon(offset, limit) {
     const container = document.getElementById('pokemon-container');
+    const loadingIndicator = document.getElementById('loading');
+    console.log("Container found:", container);
 
-    for (let i = startIndex; i < endIndex; i++) {
-        if (i >= pokemonData.length) break; // Stop als we het einde van de lijst bereiken
+    loadingIndicator.classList.remove('hidden');
+    isLoading = true;
 
-        const pokemon = pokemonData[i];
+    for (let i = offset; i < offset + limit; i++) {
+        const pokedexUrl = `https://pokeapi.co/api/v2/pokemon/${i}`;
 
-        const pokemonDiv = document.createElement("div");
-        pokemonDiv.className = "p-4 bg-white rounded-lg shadow-md my-2";
+        try {
+            const pokedexResponse = await fetch(pokedexUrl);
+            if (!pokedexResponse.ok) {
+                throw new Error(`Failed to fetch Pokémon for ${i}`);
+            }
+            const pokedexJson = await pokedexResponse.json();
+            const namePokemon = pokedexJson.name;
+            const imgPokemon = pokedexJson.sprites.front_default;
 
-        // Naam van de Pokémon
-        const newP = document.createElement("p");
-        newP.textContent = `${pokemon.id} - ${pokemon.name}`;
-        newP.className = "text-lg text-green-700";
-        pokemonDiv.appendChild(newP);
+            console.log(`Fetched Pokémon: ${namePokemon}`);
 
-        // Afbeelding van de Pokémon
-        const newImg = document.createElement("img");
-        newImg.src = pokemon.img;
-        newImg.alt = `Image of ${pokemon.name}`;
-        newImg.className = "mx-auto";
-        pokemonDiv.appendChild(newImg);
+            const pokemonDiv = document.createElement("div");
+            pokemonDiv.className = "p-4 bg-white rounded-lg shadow-md my-2";
 
-        container.appendChild(pokemonDiv);
+            const newP = document.createElement("p");
+            newP.textContent = `${i} - ${namePokemon}`;
+            newP.className = "text-lg text-green-700";
+            pokemonDiv.appendChild(newP);
+
+            const newImg = document.createElement("img");
+            newImg.src = imgPokemon;
+            newImg.alt = `Image of ${namePokemon}`;
+            newImg.className = "mx-auto";
+            pokemonDiv.appendChild(newImg);
+
+            container.appendChild(pokemonDiv);
+            console.log(`Added Pokémon to container: ${namePokemon}`);
+
+        } catch (error) {
+            console.error(error.message);
+        }
     }
 
-    pokemonCount = endIndex; 
-}
-
-async function loadMorePokemon() {
-    const start = pokemonCount;
-    const end = pokemonCount + 20;
-
-    await getPokemon(start, end);
-
-    if (pokemonCount >= maxPokemon) {
-        document.getElementById('load-more').style.display = 'none'; 
-    }
+    isLoading = false;
+    loadingIndicator.classList.add('hidden');
 }
 
 async function searchPokemon() {
-    const input = document.getElementById("myInput").value.toLowerCase();
-    const container = document.getElementById('pokemon-container');
-    container.innerHTML = ''; // Leeg de container voordat we nieuwe resultaten toevoegen
+    const input = document.getElementById('myInput').value.toLowerCase();
+    const pokemonDivs = document.querySelectorAll('#pokemon-container > div');
 
-    // Filter de pokemonData op basis van de zoekterm
-    const filteredPokemon = pokemonData.filter(pokemon => pokemon.name.includes(input));
-
-    // Toon de gevonden Pokémon
-    filteredPokemon.forEach(pokemon => {
-        const pokemonDiv = document.createElement("div");
-        pokemonDiv.className = "p-4 bg-white rounded-lg shadow-md my-2";
-
-        // Naam van de Pokémon
-        const newP = document.createElement("p");
-        newP.textContent = `${pokemon.id} - ${pokemon.name}`;
-        newP.className = "text-lg text-green-700";
-        pokemonDiv.appendChild(newP);
-
-        // Afbeelding van de Pokémon
-        const newImg = document.createElement("img");
-        newImg.src = pokemon.img;
-        newImg.alt = `Image of ${pokemon.name}`;
-        newImg.className = "mx-auto";
-        pokemonDiv.appendChild(newImg);
-
-        container.appendChild(pokemonDiv);
+    pokemonDivs.forEach(pokemonDiv => {
+        const pokemonName = pokemonDiv.querySelector('p').textContent.toLowerCase();
+        if (pokemonName.includes(input)) {
+            pokemonDiv.style.display = 'block';
+        } else {
+            pokemonDiv.style.display = 'none';
+        }
     });
-
-    // Als er geen zoekresultaten zijn, toon een melding
-    if (filteredPokemon.length === 0) {
-        const noResultMessage = document.createElement("p");
-        noResultMessage.textContent = "No Pokémon found.";
-        noResultMessage.className = "text-lg text-gray-600";
-        container.appendChild(noResultMessage);
-    }
 }
 
-// Initialisatie: Haal alle Pokémon data op en laad de eerste set bij het laden van de pagina
-fetchAllPokemon().then(() => {
-    getPokemon(0, 20); // Laad de eerste 20 Pokémon
+function setupInfiniteScroll() {
+    const container = document.getElementById('pokemon-container');
+    container.addEventListener('scroll', () => {
+        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
+            if (!isLoading) {
+                offset += BATCH_SIZE;
+                getPokemon(offset, BATCH_SIZE);
+            }
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    getPokemon(offset, BATCH_SIZE);
+    setupInfiniteScroll();
 });
-
-// Event listener voor de zoekfunctie
-document.getElementById("myInput").addEventListener("keyup", searchPokemon);
-
-// Event listener voor de Load More knop
-document.getElementById("load-more").addEventListener("click", loadMorePokemon);
