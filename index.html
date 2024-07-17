@@ -8,22 +8,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body class="bg-gray-100 text-center p-4">
-    <div id="pokemon-box" class="w-2/3 h-2/3 border-4 border-r-2 mt-2">
+  <body >
+    <nav
+      class="flex items-center justify-between flex-wrap bg-red-500 relative shadow-lg"
+    >
+      <div class="bg-red-500 absolute px-5 pt-2 pb-5 top-3 left-0 rounded-r-lg">
+        <img src="img/header2.png" alt="masterball" class="w-14" />
+      </div>
+      <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div class="lg:flex-grow ml-28 py-2">
+          <a
+            href="#responsive-header"
+            class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-black mr-4"
+          >
+            Games
+          </a>
+          <a
+            href="#responsive-header"
+            class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-black mr-4"
+          >
+            Quiz
+          </a>
+          <a
+            href="#responsive-header"
+            class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-black"
+          >
+            Contact
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    
+    <div class="flex justify-center " >
+    <div id="pokemon-box" class="w-2/3 h-[600px] border-4 border-r-2 mt-2 text-center">
       <input
         type="text"
         id="myInput"
+        class="my-2"
         onkeyup="searchPokemon()"
         placeholder="search for a pokemon..."
       />
       <div
         id="pokemon-container"
-        class="max-w-4xl mx-auto grid grid-cols-4 gap-4 w-1/1 h-96 overflow-y-auto"
+        class="max-w-4xl mx-auto grid grid-cols-4 gap-4 w-1/1 h-[552px] overflow-y-auto"
       ></div>
       <div id="loading" class="text-center text-lg text-green-700 hidden">
         Loading...
       </div>
+    </div>
     </div>
 
     <script src="script.js" async defer></script>
