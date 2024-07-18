@@ -39,7 +39,7 @@ function displayPokemonBatch() {
         const types = pokedexJson.types.map(typeInfo => typeInfo.type.name);
 
         const pokemonDiv = document.createElement("div");
-        pokemonDiv.className = "p-4 bg-white rounded-lg shadow-md my-2";
+        pokemonDiv.className = "p-4 bg-white rounded-lg shadow-md my-2  me-2";
 
         const newP = document.createElement("p");
         newP.textContent = `${pokedexJson.id} - ${namePokemon}`;
@@ -80,7 +80,7 @@ function searchPokemon() {
         const types = pokedexJson.types.map(typeInfo => typeInfo.type.name);
 
         const pokemonDiv = document.createElement("div");
-        pokemonDiv.className = "p-4 bg-white rounded-lg shadow-md my-2";
+        pokemonDiv.className = "p-4 bg-white rounded-lg shadow-md my-2 me-2";
 
         const newP = document.createElement("p");
         newP.textContent = `${pokedexJson.id} - ${namePokemon}`;

@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body >
+  <body>
     <nav
       class="flex items-center justify-between flex-wrap bg-red-500 relative shadow-lg"
     >
@@ -41,24 +41,25 @@
       </div>
     </nav>
 
-    
-    <div class="flex justify-center " >
-    <div id="pokemon-box" class="w-2/3 h-[600px] border-4 border-r-2 mt-2 text-center">
-      <input
-        type="text"
-        id="myInput"
-        class="my-2"
-        onkeyup="searchPokemon()"
-        placeholder="search for a pokemon..."
-      />
-      <div
-        id="pokemon-container"
-        class="max-w-4xl mx-auto grid grid-cols-4 gap-4 w-1/1 h-[552px] overflow-y-auto"
-      ></div>
-      <div id="loading" class="text-center text-lg text-green-700 hidden">
-        Loading...
+    <div
+      class="flex justify-center  mx-auto w-2/3 mt-5"
+    >
+      <div id="pokemon-box" class="w-2/3 h-[600px] mt-2 text-center  ">
+          <input
+            type="text"
+            id="myInput"
+            class="mb-2 p-2 border w-full border-black rounded-lg border-opacity-10"
+            onkeyup="searchPokemon()"
+            placeholder="search for a pokemon..."
+          />
+        <div
+          id="pokemon-container"
+          class=" grid grid-cols-4 gap-4 w-full h-[548px] overflow-y-auto "
+        ></div>
+        <div id="loading" class="text-center text-lg text-green-700 hidden">
+          Loading...
+        </div>
       </div>
-    </div>
     </div>
 
     <script src="script.js" async defer></script>
