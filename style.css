@@ -1,6 +1,7 @@
-html {
-    background: linear-gradient(45deg, rgb(239 68 68), white);
-    height:100%;
+body {
+    background: linear-gradient(210deg, rgb(239 68 68) 40%, black 45%, white 70%);
+    height:100vh;
+    background-repeat: no-repeat;
 }
 
 #pokemon-box {
@@ -11,3 +12,4 @@ html {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
